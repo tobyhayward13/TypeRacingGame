@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Toby Hayward">
+
+<title>TypeRacingGame</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="TypeRacingGame_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TypeRacingGame_files/libs/quarto-html/quarto.js"></script>
+<script src="TypeRacingGame_files/libs/quarto-html/popper.min.js"></script>
+<script src="TypeRacingGame_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TypeRacingGame_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TypeRacingGame_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TypeRacingGame_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TypeRacingGame_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TypeRacingGame_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TypeRacingGame_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">TypeRacingGame</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Toby Hayward </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>For this project, I am interested in creating a type racing game that uses sequence alignment to estimate performance.<br>
+I’m using <strong>R</strong> to determine what are the best parameters of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\delta\)</span> to determine a match of words in the type racing context. To do this I will generate my own data by getting myself to type out fast words (which will be considered matches) and then generate a bunch of mismatched words which will be considered the mismatches.<br>
+From this data, I can best estimate the best parameters of <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\alpha\)</span> that provide the most accurate discrimination between a matched word and a mismatched word.</p>
+<section id="part-one-data-collection" class="level2">
+<h2 class="anchored" data-anchor-id="part-one-data-collection">Part One: Data Collection</h2>
+<p>First of all, we need a large set of words. Since I am in need of getting a bunch of sentences anyway, I will fork a dataset of sentences and then deconstruct it in this file to generate my dataset.<br>
+<br>
+The data I have chosen is from Github user <a href="https://github.com/janelleshane">janelleshane</a> so all credit to her for crowd sourcing this dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">=</span> <span class="fu">scan</span>(<span class="st">'sentencedata.txt'</span>, <span class="at">what =</span> <span class="st">'char'</span>, <span class="at">sep =</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the data of quotes.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>text2 <span class="ot">=</span> <span class="fu">gsub</span>(<span class="at">x =</span> text, <span class="st">'</span><span class="sc">\"</span><span class="st">'</span>, <span class="st">''</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>text2[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "I have been a shot to do and a dead woman in the world when you can remember to want to go of my life."</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out data again.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># writeLines(text2, 'sentencedata2.txt')</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the text data into words.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>text.words <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">strsplit</span>(text2, <span class="st">' '</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>text.words[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Cused"  "of"     "grease" "that"   "I"      "have"   "just"   "ever"  
+ [9] "be"     "as"    </code></pre>
+</div>
+</div>
+<p>I want to leave the punctuation in there since it is a valid part of each sentence; likewise with uppercase characters and punctuation. However I want to remove the instances of missing characters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>text.words2 <span class="ot">=</span> text.words[text.words <span class="sc">!=</span> <span class="st">''</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>text.words2[<span class="fu">sample</span>(<span class="fu">length</span>(text.words2), <span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "the"  "sand" "the"  "was"  "sand" "sand" "the"  "sand" "sand" "sand"</code></pre>
+</div>
+</div>
+<p>Now I want to create a test set of words that I will aim to type out. I’ll make this size about <strong>1,000</strong> and I will consider the words I try to match “matches”. I will then create an equal size list of “mismatches” that will be of words which don’t match.<br>
+From this, I will use the python function I created which will determine the distance of the two words and then estimate parameters <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\alpha\)</span> which most clearly discriminate mismatches from matches.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sample.n <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">length</span>(text.words2), <span class="fl">1e3</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>train.text <span class="ot">=</span> text.words2[sample.n]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>train.text[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "sand"   "sand"   "sand"   "sand"   "said"   "sand"   "out"    "the"   
+ [9] "sand"   "bright"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(train.text, <span class="st">'train.text.txt'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is a lot of “sand” in this database hahaha.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.5.0 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">words =</span> text.words2) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(words) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(n, <span class="at">n =</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> words, <span class="at">y =</span> n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/sand-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># text2 %&gt;% tibble() %&gt;%  rowid_to_column() %&gt;%  filter(text2 %&gt;% str_detect('sand')) %&gt;% view()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What the hell…<br>
+Found the source of the <em>sand</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>text2 <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">c</span>(<span class="dv">2281</span>, <span class="dv">1909</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="cf">function</span>(s) s <span class="sc">%&gt;%</span> <span class="fu">strsplit</span>(<span class="st">' '</span>) <span class="sc">%&gt;%</span> <span class="fu">table</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+.
+           a          and          bar           be          bit consequences 
+           6            3            1            1            1            1 
+      couple         dark        first         from         gods         hall 
+           1            1            1            1            1            1 
+          in           is       little         long          man       market 
+           2            2            1            1            1            1 
+      matter           of          old       party,   production   remarkable 
+           1           10            2            1            1            1 
+        sand     sequence         that          the        there         time 
+       61644            1            1           11            1            1 
+          to        world         year 
+           1            1            1 
+
+[[2]]
+.
+          a     against         and          As          at        back 
+          3           1           7           1           1           1 
+         be        been     belched     between         box         cat 
+          1           1           1           1           1           1 
+      color       could        day.   decoction     eternal       great 
+          1           1           1           1           1           2 
+    ground,        have        heat      imface          in interesting 
+          1           1           1           1           1           1 
+     little          of          on       peace      person     pilsage 
+          1           7           1           1           1           1 
+       sand     seament       shock       still         the       three 
+       5789           1           1           1          15           1 
+       town        type         was         way         who      witing 
+          1           1           1           1           1           1 </code></pre>
+</div>
+</div>
+<p>Let’s try that once more.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>text3 <span class="ot">=</span> text2[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2281</span>, <span class="dv">1909</span>)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>text.words3 <span class="ot">=</span> <span class="fu">unlist</span>(<span class="fu">strsplit</span>(text3, <span class="st">' '</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>text.words3 <span class="ot">=</span> text.words3[text.words3 <span class="sc">!=</span> <span class="st">''</span>]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">words =</span> text.words3) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(words) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(n, <span class="at">n =</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> words, <span class="at">y =</span> n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/data%20in%20again-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(text.words3 <span class="sc">==</span> <span class="st">'sand'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sample.n <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">length</span>(text.words3), <span class="fl">1e3</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>train.text <span class="ot">=</span> text.words3[sample.n]</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>train.text[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "great"     "orders,"   "predica's" "named"     "eye."      "have"     
+ [7] "said"      "and"       "out"       "in"       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(train.text, <span class="st">'train.text.txt'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Will return when I finish typing out my data. Tune in the headphones…<br>
+I’m back. I just typed out 1000 words that were from the data set above. I will combine the data set with 1000 similarly matched words also and then use those words to measure the distance using the sequence alignment algorithm.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>train.user <span class="ot">=</span> <span class="fu">scan</span>(<span class="st">'user_text.txt'</span>, <span class="st">'char'</span>, <span class="at">sep =</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>(<span class="at">my_data =</span> <span class="fu">tibble</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  train.text,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  train.user,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">match =</span> <span class="cn">TRUE</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,000 × 3
+   train.text train.user match
+   &lt;chr&gt;      &lt;chr&gt;      &lt;lgl&gt;
+ 1 great      great      TRUE 
+ 2 orders,    orders.    TRUE 
+ 3 predica's  predica's  TRUE 
+ 4 named      named      TRUE 
+ 5 eye.       eye.       TRUE 
+ 6 have       have       TRUE 
+ 7 said       said       TRUE 
+ 8 and        and        TRUE 
+ 9 out        out        TRUE 
+10 in         in         TRUE 
+# … with 990 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>sample.n <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">length</span>(text.words3), <span class="fl">2e3</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>train.text.mis <span class="ot">=</span> text.words3[sample.n]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>train.text.mis[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "the"     "of"      "the"     "of"      "pines."  "he"      "a"      
+ [8] "was"     "lighted" "removed"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Put it into same format and row bind.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">word_data =</span> <span class="fu">matrix</span>(train.text.mis, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(F) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'train.text'</span> <span class="ot">=</span> V1, <span class="st">'train.user'</span> <span class="ot">=</span> V2, <span class="st">'match'</span> <span class="ot">=</span> <span class="st">`</span><span class="at">F</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(my_data, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">match =</span> <span class="fu">case_when</span>(match <span class="sc">~</span> match,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>                           train.text <span class="sc">==</span> train.user <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                           <span class="cn">TRUE</span> <span class="sc">~</span> match)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,000 × 3
+   train.text train.user match
+   &lt;chr&gt;      &lt;chr&gt;      &lt;lgl&gt;
+ 1 great      great      TRUE 
+ 2 orders,    orders.    TRUE 
+ 3 predica's  predica's  TRUE 
+ 4 named      named      TRUE 
+ 5 eye.       eye.       TRUE 
+ 6 have       have       TRUE 
+ 7 said       said       TRUE 
+ 8 and        and        TRUE 
+ 9 out        out        TRUE 
+10 in         in         TRUE 
+# … with 1,990 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="part-2-sequence-alignment" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-sequence-alignment">Part 2: Sequence Alignment</h2>
+<p>The sequence alignment algorithm is below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sequence_align <span class="ot">&lt;-</span> <span class="cf">function</span>(w1, w2, delta, alpha, <span class="at">distance_return =</span> F) {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">=</span> <span class="fu">nchar</span>(w1) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">nchar</span>(w2) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  M <span class="ot">=</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> m, <span class="at">ncol =</span> n)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  M[<span class="dv">1</span>,] <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span>(n<span class="dv">-1</span>) <span class="sc">*</span> delta</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  M[,<span class="dv">1</span>] <span class="ot">=</span> <span class="dv">0</span><span class="sc">:</span>(m<span class="dv">-1</span>) <span class="sc">*</span> delta</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>m){</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) {</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>      M[i, j] <span class="ot">=</span> <span class="fu">min</span>(</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        (<span class="fu">substring</span>(w1, i<span class="dv">-1</span>, i<span class="dv">-1</span>) <span class="sc">!=</span> <span class="fu">substring</span>(w2, j<span class="dv">-1</span>, j<span class="dv">-1</span>)) <span class="sc">*</span> alpha <span class="sc">+</span> M[i<span class="dv">-1</span>, j<span class="dv">-1</span>],</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        delta <span class="sc">+</span> M[i<span class="dv">-1</span>, j],</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        delta <span class="sc">+</span> M[i, j<span class="dv">-1</span>]</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (distance_return) <span class="fu">return</span>(M[m<span class="dv">-1</span>, n<span class="dv">-1</span>])</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(M)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="fu">sequence_align</span>(<span class="st">'test'</span>, <span class="st">'fat'</span>, <span class="dv">2</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    0    2    4    6
+[2,]    2    4    6    4
+[3,]    4    6    8    6
+[4,]    6    8   10    8
+[5,]    8   10   12   10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sequence_align</span>(<span class="st">'test'</span>, <span class="st">'fat'</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="at">distance_return =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>The distance is defined to the minimum sequence alignment penalty with respect to <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\alpha\)</span>. We can calculate those now for the words given in the dataset for say a <span class="math inline">\(\delta = 1\)</span> and <span class="math inline">\(\alpha = 2\)</span>.</p>
+<div class="cell" data-hash="TypeRacingGame_cache/html/calculate_distance_a3917c53a70912d803683d4a5fde48b1">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">=</span> <span class="fu">map2_dbl</span>(word_data<span class="sc">$</span>train.text, word_data<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="dv">2</span>, <span class="at">distance_return =</span> T)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">40</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>word_data <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   train.text train.user match distance
+1          be       been FALSE        2
+2          in       ice, FALSE        2
+3       wispy      wispy  TRUE        0
+4         the       son, FALSE        5
+5         sun        sun  TRUE        0
+6          of         we FALSE        2
+7          of        the FALSE        3
+8         the        now FALSE        4
+9        time        and FALSE        5
+10        was         in FALSE        3
+11         at         at  TRUE        0
+12        was         as FALSE        1
+13         of         of  TRUE        0
+14         of          I FALSE        1
+15    howlers     normal FALSE        7
+16     middle     middle  TRUE        0
+17     friend     friend  TRUE        0
+18        man     world. FALSE        7
+19        the        the  TRUE        0
+20        who        the FALSE        2
+21        the        the  TRUE        0
+22       wind         of FALSE        4
+23        not       left FALSE        5
+24         to         to  TRUE        0
+25  amusement  amusement  TRUE        0
+26       city       city  TRUE        0
+27       that        the FALSE        1
+28        man        man  TRUE        0
+29        new        her FALSE        2
+30        was        was  TRUE        0
+31        the         It FALSE        3
+32          a        the FALSE        2
+33        and       king FALSE        3
+34    falling    falling  TRUE        0
+35          I  distance. FALSE        8
+36          a          a  TRUE        0
+37         It     ground FALSE        6
+38      care;        and FALSE        4
+39      woman      dawn, FALSE        6
+40       man,       lord FALSE        6
+41        the        the  TRUE        0
+42     autumn        and FALSE        5
+43    certain       that FALSE        5
+44      first      first  TRUE        0
+45      might      might  TRUE        0
+46       city       city  TRUE        0
+47         to         to  TRUE        0
+48        and        and  TRUE        0
+49        man        man  TRUE        0
+50        the         in FALSE        3</code></pre>
+</div>
+</div>
+<p>We are interested in finding parameters <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\alpha\)</span> that best discriminate matches from mismatches. To do this, I would incorporate the <code>nlm</code> function which uses a gradient descent algorithm to determine these parameters.<br>
+However, it is of my interest to first begin by viewing the data first and seeing if we can just guess some values. Let’s begin with the sensible <span class="math inline">\(\delta = 1\)</span> (blank penalty) and <span class="math inline">\(\alpha = 2\)</span> (mismatch penalty).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>word_data <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">fill =</span> match)) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">col =</span> <span class="st">'black'</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/visualise-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There is some serious overlap here. I suppose this wasn’t a smart approach. Thankfully we have another idea.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>matches <span class="ot">=</span> word_data[word_data<span class="sc">$</span>match,]</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>mismatches <span class="ot">=</span> word_data[<span class="sc">!</span>word_data<span class="sc">$</span>match,]</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>sequence_align.nlm <span class="ot">&lt;-</span> <span class="cf">function</span>(v) {</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">=</span> v[<span class="dv">1</span>]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">=</span> v[<span class="dv">2</span>]</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  matches_dat <span class="ot">=</span> <span class="fu">map2_dbl</span>(matches<span class="sc">$</span>train.text, matches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> d, <span class="at">alpha =</span> a, <span class="at">distance_return =</span> T)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  mismatches_dat <span class="ot">=</span> <span class="fu">map2_dbl</span>(mismatches<span class="sc">$</span>train.text, mismatches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> d, <span class="at">alpha =</span> a, <span class="at">distance_return =</span> T)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. </span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  p_mis <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">distance =</span> <span class="fu">append</span>(matches_dat, mismatches_dat),</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">match =</span> <span class="fu">rep</span>(<span class="fu">c</span>(T, F), <span class="at">each =</span> <span class="fl">1e3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(match) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">-</span>p_mis</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a><span class="fu">nlm</span>(sequence_align.nlm, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$minimum
+[1] 0.037
+
+$estimate
+[1] 1 2
+
+$gradient
+[1] 0 0
+
+$code
+[1] 1
+
+$iterations
+[1] 0</code></pre>
+</div>
+</div>
+<p>Well I should’ve known. <code>nlm</code> wont help us here since I assume it would only work on those algorithms with a derivative? I’ve got another idea though which is to create my own random restart hill climbing algorithm and determine the values that way.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>hill_climb <span class="ot">&lt;-</span> <span class="cf">function</span>(f, v, <span class="at">prev =</span> <span class="fu">f</span>(v), <span class="at">temp =</span> <span class="dv">1</span>, <span class="at">threshold =</span> <span class="fl">1e-3</span>){</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2-D hill climbing crude algorithm. </span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Small error check (just in case)</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(v) <span class="sc">!=</span> <span class="dv">2</span>) <span class="fu">stop</span>(<span class="st">'ERROR: v must be of dimension: 2'</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  tests <span class="ot">=</span> <span class="fu">t</span>(<span class="fu">apply</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>), <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">*</span> temp, <span class="at">ncol =</span> <span class="dv">2</span>), <span class="dv">1</span>, <span class="cf">function</span>(r) r <span class="sc">+</span> v))</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">=</span> <span class="fu">apply</span>(tests, <span class="dv">1</span>, f)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  min_i <span class="ot">=</span> <span class="fu">which.min</span>(results)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (results[min_i] <span class="sc">&lt;</span> prev) <span class="fu">return</span>(<span class="fu">hill_climb</span>(f, tests[min_i,], results[min_i], temp))</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (temp <span class="sc">&lt;</span> threshold) <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">param =</span> v, <span class="at">p =</span> prev))</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">return</span>(<span class="fu">hill_climb</span>(f, v, prev, temp <span class="sc">/</span> <span class="dv">2</span>))</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="fu">hill_climb</span>(sequence_align.nlm, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$param
+[1] 0 2
+
+$p
+[1] 0</code></pre>
+</div>
+</div>
+<p>So this reckons that the best parameters are <span class="math inline">\(\delta = 0\)</span> and <span class="math inline">\(\alpha = 2\)</span>. And this apparently does so such that there is a perfect distinction between the mismatches and the matches.</p>
+<div class="cell" data-hash="TypeRacingGame_cache/html/testing results_3661e79491a3d67b4ca8e57338530cfb">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>distance <span class="ot">=</span> <span class="fu">map2_dbl</span>(word_data<span class="sc">$</span>train.text, word_data<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> <span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">2</span>, <span class="at">distance_return =</span> T)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>word_data <span class="sc">%&gt;%</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">fill =</span> match)) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">col =</span> <span class="st">'black'</span>) <span class="sc">+</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/testing%20results-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sequence_align</span>(<span class="st">'test'</span>, <span class="st">'try'</span>, <span class="at">delta =</span> <span class="dv">0</span>, <span class="at">alpha =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    0    0    0    0
+[2,]    0    0    0    0
+[3,]    0    0    0    0
+[4,]    0    0    0    0
+[5,]    0    0    0    0</code></pre>
+</div>
+</div>
+<p>Ah that makes sense. Okay let’s limit it such that the penalty cannot exceed 0.</p>
+<div class="cell" data-hash="TypeRacingGame_cache/html/try again 2_5e3864217d35d187bce8f3b6ce73b319">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>sequence_align.nlm <span class="ot">&lt;-</span> <span class="cf">function</span>(v) {</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">=</span> v[<span class="dv">1</span>]</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">=</span> v[<span class="dv">2</span>]</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># FIX</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (d <span class="sc">&lt;=</span> <span class="dv">0</span> <span class="sc">|</span> a <span class="sc">&lt;=</span> <span class="dv">0</span>) <span class="fu">return</span> (<span class="dv">2</span>) <span class="co">#  </span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  matches_dat <span class="ot">=</span> <span class="fu">map2_dbl</span>(matches<span class="sc">$</span>train.text, matches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> d, <span class="at">alpha =</span> a, <span class="at">distance_return =</span> T)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  mismatches_dat <span class="ot">=</span> <span class="fu">map2_dbl</span>(mismatches<span class="sc">$</span>train.text, mismatches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> d, <span class="at">alpha =</span> a, <span class="at">distance_return =</span> T)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. </span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  p_mis <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">distance =</span> <span class="fu">append</span>(matches_dat, mismatches_dat),</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">match =</span> <span class="fu">rep</span>(<span class="fu">c</span>(T, F), <span class="at">each =</span> <span class="fl">1e3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(match) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">-</span>p_mis</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a><span class="co"># undebug(hill_climb)</span></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="fu">hill_climb</span>(sequence_align.nlm, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$param
+[1] 2 2
+
+$p
+[1] 0.03</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hill_climb</span>(sequence_align.nlm, <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>), <span class="at">temp =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$param
+[1] 10 20
+
+$p
+[1] 0.037</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hill_climb</span>(sequence_align.nlm, <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">10</span>), <span class="at">temp =</span> <span class="dv">16</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$param
+[1] 200  10
+
+$p
+[1] 0.074</code></pre>
+</div>
+</div>
+<p>Alright, that didn’t really work. So far though I am most comfortable with the 2, 2 parameters but I really think we can do better. Time for a brute approach.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start.time = Sys.time()</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co"># sequence_align.nlm &lt;- function(v) {</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   d = v[1]</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   a = v[2]</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   if (d == 1) {print(paste0(a * 2 - 2, '%'))</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(Sys.time() - start.time)</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     print(c(d,a))}</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   # FIX</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   if (d &lt;= 0 | a &lt;= 0) return (2) #  </span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   matches_dat = map2_dbl(matches$train.text, matches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   mismatches_dat = map2_dbl(mismatches$train.text, mismatches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   # join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. </span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   p_mis = tibble(distance = append(matches_dat, mismatches_dat),</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="co">#          match = rep(c(T, F), each = 1e3)) %&gt;% </span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="co">#     arrange(distance) %&gt;% </span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a><span class="co">#     slice(1:1000) %&gt;% </span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     pull(match) %&gt;% sum()/1000</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   1-p_mis</span></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="co"># param = expand.grid(deltas = 1:50, alphas = 1:50)</span></span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a><span class="co"># results = apply(param, 1, sequence_align.nlm)</span></span>
+<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a><span class="co"># results.data = cbind(param, results)</span></span>
+<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(results.data, 'results_data.csv')</span></span>
+<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a><span class="co"># # About 5 minutes</span></span>
+<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a>results.data <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">'results_data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 2500 Columns: 3
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (3): deltas, alphas, results
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">expand.grid</span>(<span class="at">deltas =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">alphas =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)[<span class="fu">which.min</span>(results.data<span class="sc">$</span>results), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  deltas alphas
+1      1      1</code></pre>
+</div>
+</div>
+<p>So once again, the parameters that provided the most distinction are simply <span class="math inline">\(\delta = 1\)</span> and <span class="math inline">\(\alpha = 1\)</span>. This is not totally satisfying but I’ll take it for now.<br>
+I could try alternative approaches, but I am tired of testing, and am happy to move on with the project.<br>
+Now we just need to chose a cutoff point that will determine if a word was a misspelling or a mismatch. What is important to keep in mind however is the length of the word, since that appears to contribute lots to larger distances.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>word_data2 <span class="ot">=</span> word_data <span class="sc">%&gt;%</span> </span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(<span class="at">distance =</span> <span class="fu">append</span>(<span class="fu">map2_dbl</span>(matches<span class="sc">$</span>train.text, matches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">distance_return =</span> T),</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map2_dbl</span>(mismatches<span class="sc">$</span>train.text, mismatches<span class="sc">$</span>train.user, sequence_align, <span class="at">delta =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">distance_return =</span> T))) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">word_length =</span> <span class="fu">nchar</span>(train.text))</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>word_data2 <span class="sc">%&gt;%</span> </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(word_length, match) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_distance =</span> <span class="fu">mean</span>(distance),</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">n_words =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> word_length, <span class="at">y =</span> distance)) <span class="sc">+</span></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.02</span>) <span class="sc">+</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_distance)) <span class="sc">+</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span></span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Average distance over Word Length'</span>,</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">'Word Length'</span>, <span class="at">y =</span> <span class="st">'Distance'</span>) <span class="sc">+</span></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> n_words, <span class="at">y =</span> <span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>match)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/choose%20cutoff-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<p>To estimate how much we need to scale the distance down by the length of the word, we can use regression analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">=</span> <span class="fu">glm</span>(<span class="at">data =</span> word_data2,</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>          match <span class="sc">~</span> distance <span class="sc">*</span> word_length,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="st">'binomial'</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = match ~ distance * word_length, family = "binomial", 
+    data = word_data2)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.5999  -0.1914   0.2822   0.3979   5.8669  
+
+Coefficients:
+                     Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)           2.07211    0.24476   8.466   &lt;2e-16 ***
+distance             -2.19686    0.18593 -11.815   &lt;2e-16 ***
+word_length           0.14143    0.06349   2.228   0.0259 *  
+distance:word_length  0.01148    0.04149   0.277   0.7820    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2771.24  on 1999  degrees of freedom
+Residual deviance:  986.99  on 1996  degrees of freedom
+AIC: 994.99
+
+Number of Fisher Scoring iterations: 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">=</span> <span class="fu">glm</span>(<span class="at">data =</span> word_data2,</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>          match <span class="sc">~</span> distance <span class="sc">+</span> word_length,</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="st">'binomial'</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = match ~ distance + word_length, family = "binomial", 
+    data = word_data2)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.6281  -0.1936   0.2737   0.3990   5.8377  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  2.02547    0.17629  11.490  &lt; 2e-16 ***
+distance    -2.15280    0.09401 -22.900  &lt; 2e-16 ***
+word_length  0.15508    0.04019   3.859 0.000114 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 2771.24  on 1999  degrees of freedom
+Residual deviance:  987.06  on 1997  degrees of freedom
+AIC: 993.06
+
+Number of Fisher Scoring iterations: 7</code></pre>
+</div>
+</div>
+<p>This tells me that using just this distance metric isn’t quite enough to well predict whether the word was meant to be a match. It is very necessary that we consider this coefficient.<br>
+<br>
+If we do here are the results.</p>
+</section>
+<section id="part-3-the-results." class="level2">
+<h2 class="anchored" data-anchor-id="part-3-the-results.">Part 3: The Results.</h2>
+<p>What I gather from the analysis above is that we can estimate the probability that two words, <span class="math inline">\(w, w'\)</span>, are a potential match by applying the algorithm to determine the <em>minimum distance</em> <span class="math inline">\(d_{ww'}\)</span> and combining it with the length of the word <span class="math inline">\(w\)</span>, <span class="math inline">\(s_w\)</span>. The formula below is the estimate of this probability:</p>
+<p><span class="math display">\[
+P(w_i = w_i') = plogis(2 - 2.15 d_{ww'} + 0.15s_w)
+\]</span></p>
+<p><span class="math display">\[
+Where, \quad plogis(x) = \frac{exp(x)}{1+exp(x)}
+\]</span></p>
+<p>To choose a good probability to cut off, we’ll do an <em>ROC</em> analysis on some test data, and use <em>AUC</em> to estimate it’s performance.<br>
+Which means more typing words for 20 minutes. Great.</p>
+</section>
+<section id="part-4-efficacy." class="level2">
+<h2 class="anchored" data-anchor-id="part-4-efficacy.">Part 4: Efficacy.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>sample.n <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">length</span>(text.words3), <span class="fl">1e3</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>test.text <span class="ot">=</span> text.words3[sample.n]</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>test.text[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "in"     "a"      "the"    "gate"   "water," "The"    "were"   "which" 
+ [9] "feding" "more"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(test.text, <span class="st">'test.text.txt'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>test.user <span class="ot">=</span> <span class="fu">scan</span>(<span class="st">'user_text_test.txt'</span>, <span class="st">'char'</span>, <span class="at">sep =</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>(<span class="at">my_data.test =</span> <span class="fu">tibble</span>(</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  test.text,</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>  test.user,</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">match =</span> <span class="cn">TRUE</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,000 × 3
+   test.text test.user match
+   &lt;chr&gt;     &lt;chr&gt;     &lt;lgl&gt;
+ 1 in        in        TRUE 
+ 2 a         a         TRUE 
+ 3 the       the       TRUE 
+ 4 gate      gate      TRUE 
+ 5 water,    water,    TRUE 
+ 6 The       The       TRUE 
+ 7 were      were      TRUE 
+ 8 which     which     TRUE 
+ 9 feding    feding    TRUE 
+10 more      more      TRUE 
+# … with 990 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>sample.n <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">length</span>(text.words3), <span class="fl">2e3</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>test.text.mis <span class="ot">=</span> text.words3[sample.n]</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>test.text.mis[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "to"      "-"       "the"     "king"    "The"     "can"     "televey"
+ [8] "years,"  "the"     "the"    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Put it into same format and row bind.</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">word_data.test =</span> <span class="fu">matrix</span>(test.text.mis, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(F) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">'test.text'</span> <span class="ot">=</span> V1, <span class="st">'test.user'</span> <span class="ot">=</span> V2, <span class="st">'match'</span> <span class="ot">=</span> <span class="st">`</span><span class="at">F</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(my_data.test, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">match =</span> <span class="fu">case_when</span>(match <span class="sc">~</span> match,</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>                           test.text <span class="sc">==</span> test.user <span class="sc">~</span> <span class="cn">TRUE</span>,</span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>                           <span class="cn">TRUE</span> <span class="sc">~</span> match)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,000 × 3
+   test.text test.user match
+   &lt;chr&gt;     &lt;chr&gt;     &lt;lgl&gt;
+ 1 in        in        TRUE 
+ 2 a         a         TRUE 
+ 3 the       the       TRUE 
+ 4 gate      gate      TRUE 
+ 5 water,    water,    TRUE 
+ 6 The       The       TRUE 
+ 7 were      were      TRUE 
+ 8 which     which     TRUE 
+ 9 feding    feding    TRUE 
+10 more      more      TRUE 
+# … with 1,990 more rows</code></pre>
+</div>
+</div>
+<p>Before building the ROC, we’ll need to code up the function that is outlined above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>prob_w_w <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y){</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">=</span> <span class="fu">sequence_align</span>(x, y, <span class="dv">1</span>, <span class="dv">1</span>, T)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">=</span> <span class="fu">nchar</span>(x)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plogis</span>(<span class="dv">2</span> <span class="sc">-</span> <span class="fl">2.15</span> <span class="sc">*</span> d <span class="sc">+</span> <span class="fl">0.15</span> <span class="sc">*</span> s)</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>probs <span class="ot">=</span> <span class="fu">map2_dbl</span>(word_data.test<span class="sc">$</span>test.text, word_data.test<span class="sc">$</span>test.user, prob_w_w)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>(<span class="at">word_data.test2 =</span> word_data.test <span class="sc">%&gt;%</span> </span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(probs) <span class="sc">%&gt;%</span> </span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,000 × 4
+   test.text test.user match probs
+   &lt;chr&gt;     &lt;chr&gt;     &lt;lgl&gt; &lt;dbl&gt;
+ 1 in        in        TRUE  0.909
+ 2 a         a         TRUE  0.896
+ 3 the       the       TRUE  0.921
+ 4 gate      gate      TRUE  0.931
+ 5 water,    water,    TRUE  0.948
+ 6 The       The       TRUE  0.921
+ 7 were      were      TRUE  0.931
+ 8 which     which     TRUE  0.940
+ 9 feding    feding    TRUE  0.948
+10 more      more      TRUE  0.931
+# … with 1,990 more rows</code></pre>
+</div>
+</div>
+<p>Now we can build an ROC. This is going to be fun!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>roc_data <span class="ot">=</span> word_data.test2 <span class="sc">%&gt;%</span> </span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(probs))</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copying code from my school assignment. (Shoutout DATASCI 399 UOA class of 2022 baby!)</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>iterations <span class="ot">=</span> <span class="dv">1001</span></span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>test_p <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length =</span> iterations)</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>specificity  <span class="ot">=</span> <span class="fu">numeric</span>(iterations)</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>sensitivity <span class="ot">=</span> <span class="fu">numeric</span>(iterations)</span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>iterations){</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> test_p[i]</span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  roc_data2 <span class="ot">=</span> roc_data <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">assumed_match =</span> probs <span class="sc">&gt;=</span> p)</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>  roc_data2 <span class="ot">=</span> roc_data2 <span class="sc">%&gt;%</span> </span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">tp =</span> assumed_match <span class="sc">&amp;</span> match,</span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">fp =</span> assumed_match <span class="sc">&amp;</span> <span class="sc">!</span>match,</span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">tn =</span> <span class="sc">!</span>assumed_match <span class="sc">&amp;</span> <span class="sc">!</span>match,</span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">fn =</span> <span class="sc">!</span>assumed_match <span class="sc">&amp;</span> match</span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>  sensitivity[i] <span class="ot">=</span> <span class="fu">sum</span>(roc_data2<span class="sc">$</span>tp) <span class="sc">/</span> (<span class="fu">sum</span>(roc_data2<span class="sc">$</span>tp) <span class="sc">+</span> <span class="fu">sum</span>(roc_data2<span class="sc">$</span>fn))</span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>  specificity[i] <span class="ot">=</span> <span class="fu">sum</span>(roc_data2<span class="sc">$</span>tn) <span class="sc">/</span> (<span class="fu">sum</span>(roc_data2<span class="sc">$</span>tn) <span class="sc">+</span> <span class="fu">sum</span>(roc_data2<span class="sc">$</span>fp))</span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>roc_table <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb69-28"><a href="#cb69-28" aria-hidden="true" tabindex="-1"></a>  test_p,</span>
+<span id="cb69-29"><a href="#cb69-29" aria-hidden="true" tabindex="-1"></a>  sensitivity,</span>
+<span id="cb69-30"><a href="#cb69-30" aria-hidden="true" tabindex="-1"></a>  specificity,</span>
+<span id="cb69-31"><a href="#cb69-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">sen_spec =</span> sensitivity <span class="sc">+</span> specificity</span>
+<span id="cb69-32"><a href="#cb69-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb69-33"><a href="#cb69-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-34"><a href="#cb69-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Gives multiple best p's. Give middle</span></span>
+<span id="cb69-35"><a href="#cb69-35" aria-hidden="true" tabindex="-1"></a>best_p <span class="ot">=</span> <span class="fu">slice_max</span>(roc_table, sen_spec)[<span class="fu">nrow</span>(<span class="fu">slice_max</span>(roc_table, sen_spec)) <span class="sc">%/%</span> <span class="dv">2</span>,]</span>
+<span id="cb69-36"><a href="#cb69-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-37"><a href="#cb69-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate AUC</span></span>
+<span id="cb69-38"><a href="#cb69-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Crudely, take the sum of the sensitivity + specificity</span></span>
+<span id="cb69-39"><a href="#cb69-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-40"><a href="#cb69-40" aria-hidden="true" tabindex="-1"></a>roc_table <span class="sc">%&gt;%</span> </span>
+<span id="cb69-41"><a href="#cb69-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">-</span>specificity, <span class="at">y =</span> sensitivity)) <span class="sc">+</span></span>
+<span id="cb69-42"><a href="#cb69-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">col =</span> <span class="st">'blue'</span>) <span class="sc">+</span></span>
+<span id="cb69-43"><a href="#cb69-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb69-44"><a href="#cb69-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> best_p, <span class="at">col =</span> <span class="st">'yellow'</span>) <span class="sc">+</span></span>
+<span id="cb69-45"><a href="#cb69-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> best_p, <span class="at">x =</span> <span class="fl">0.25</span>, <span class="at">y =</span> <span class="fl">0.75</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">'Best p = %f'</span>, test_p))) <span class="sc">+</span></span>
+<span id="cb69-46"><a href="#cb69-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> best_p, <span class="at">x =</span> <span class="fl">0.25</span>, <span class="at">y =</span> <span class="fl">0.68</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">str_c</span>(<span class="st">'~'</span>, <span class="fu">sprintf</span>(<span class="st">'%.2f'</span>, sen_spec<span class="sc">/</span><span class="dv">2</span><span class="sc">*</span><span class="dv">100</span>), <span class="st">'% accuracy'</span>))) <span class="sc">+</span></span>
+<span id="cb69-47"><a href="#cb69-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb69-48"><a href="#cb69-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="TypeRacingGame_files/figure-html/ROC-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>That’s incredible.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>I set out to create an algorithm that utilises <em>sequence-alignment</em> to determine if two words were meant to match or not. This is going to be useful in the development of my type-racing game so that the computer can discern between words that are meant to be matches and those which are not.<br>
+My resulting algorithm, according to data that I collected myself (I’m well aware of the violations here), is able to discern misspellings from mis matching words with 97.94% accuracy; including perfect spellings.<br>
+This means that this algorithm should be more than effective at determining word matches between two sentences.</p>
+<section id="critique" class="level2">
+<h2 class="anchored" data-anchor-id="critique">Critique</h2>
+<ul>
+<li>Determining the best values for <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\alpha\)</span> in the sequence-alignment algorithm was crude. This can be improved upon, although I am satisfied enough with the results that I am not willing to do it myself at this point.</li>
+<li>All the training and testing data I collected myself. I tried to simulate what misspellings would look like in a rushed, time pressured environment but I am sure other subjects would have different results. I am hoping that the fatigue I experience from typing thousands of words would be enough to simulate this expected environment.</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,539 @@
+---
+title: "TypeRacingGame"
+author: "Toby Hayward"
+---
+
+# Summary
+
+For this project, I am interested in creating a type racing game that uses sequence alignment to estimate performance. \
+I'm using **R** to determine what are the best parameters of $\alpha$ and $\delta$ to determine a match of words in the type racing context. To do this I will generate my own data by getting myself to type out fast words (which will be considered matches) and then generate a bunch of mismatched words which will be considered the mismatches. \
+From this data, I can best estimate the best parameters of $\delta$ and $\alpha$ that provide the most accurate discrimination between a matched word and a mismatched word.
+
+## Part One: Data Collection
+
+First of all, we need a large set of words. Since I am in need of getting a bunch of sentences anyway, I will fork a dataset of sentences and then deconstruct it in this file to generate my dataset. \
+\
+The data I have chosen is from Github user [janelleshane](https://github.com/janelleshane) so all credit to her for crowd sourcing this dataset.
+
+```{r read data}
+text = scan('sentencedata.txt', what = 'char', sep = '\n')
+
+# Clean the data of quotes.
+text2 = gsub(x = text, '\"', '')
+text2[2]
+
+# Write out data again.
+# writeLines(text2, 'sentencedata2.txt')
+
+# Split the text data into words.
+text.words = unlist(strsplit(text2, ' '))
+text.words[1:10]
+```
+
+I want to leave the punctuation in there since it is a valid part of each sentence; likewise with uppercase characters and punctuation. However I want to remove the instances of missing characters. 
+
+```{r remove missing characters}
+text.words2 = text.words[text.words != '']
+text.words2[sample(length(text.words2), 10)]
+```
+
+Now I want to create a test set of words that I will aim to type out. I'll make this size about **1,000** and I will consider the words I try to match "matches". I will then create an equal size list of "mismatches" that will be of words which don't match.\
+From this, I will use the python function I created which will determine the distance of the two words and then estimate parameters $\delta$ and $\alpha$ which most clearly discriminate mismatches from matches. 
+
+```{r get words for typing}
+set.seed(123)
+sample.n = sample(length(text.words2), 1e3)
+train.text = text.words2[sample.n]
+train.text[1:10]
+writeLines(train.text, 'train.text.txt')
+
+```
+
+There is a lot of "sand" in this database hahaha.
+
+```{r sand}
+library(tidyverse)
+tibble(words = text.words2) %>% 
+  count(words) %>% 
+  slice_max(n, n = 20) %>% 
+  ggplot() +
+  geom_col(aes(x = words, y = n))
+
+# text2 %>% tibble() %>%  rowid_to_column() %>%  filter(text2 %>% str_detect('sand')) %>% view()
+```
+
+What the hell...\
+Found the source of the *sand*.
+
+```{r sand 2}
+text2 %>% 
+  tibble() %>% 
+  slice(c(2281, 1909)) %>% 
+  pull() %>% 
+  lapply(function(s) s %>% strsplit(' ') %>% table())
+
+```
+
+
+Let's try that once more. 
+
+
+```{r data in again}
+text3 = text2[-c(2281, 1909)]
+
+text.words3 = unlist(strsplit(text3, ' '))
+
+text.words3 = text.words3[text.words3 != '']
+tibble(words = text.words3) %>% 
+  count(words) %>% 
+  slice_max(n, n = 20) %>% 
+  ggplot() +
+  geom_col(aes(x = words, y = n))
+sum(text.words3 == 'sand')
+```
+
+```{r get words for typing 2}
+set.seed(123)
+sample.n = sample(length(text.words3), 1e3)
+train.text = text.words3[sample.n]
+train.text[1:10]
+writeLines(train.text, 'train.text.txt')
+
+```
+
+Will return when I finish typing out my data. Tune in the headphones...\
+I'm back. I just typed out 1000 words that were from the data set above. I will combine the data set with 1000 similarly matched words also and then use those words to measure the distance using the sequence alignment algorithm. 
+
+```{r my data yay}
+train.user = scan('user_text.txt', 'char', sep = '\n')
+
+(my_data = tibble(
+  train.text,
+  train.user,
+  match = TRUE
+))
+```
+
+```{r other data mismatches}
+set.seed(12)
+sample.n = sample(length(text.words3), 2e3)
+train.text.mis = text.words3[sample.n]
+train.text.mis[1:10]
+
+# Put it into same format and row bind.
+(word_data = matrix(train.text.mis, ncol = 2) %>% 
+  as.data.frame() %>% 
+  cbind(F) %>% 
+  as_tibble() %>% 
+  rename('train.text' = V1, 'train.user' = V2, 'match' = `F`) %>% 
+  rbind(my_data, .) %>% 
+  mutate(match = case_when(match ~ match,
+                           train.text == train.user ~ TRUE,
+                           TRUE ~ match)))
+
+```
+
+## Part 2: Sequence Alignment
+
+The sequence alignment algorithm is below.
+
+```{r sequence alignment}
+sequence_align <- function(w1, w2, delta, alpha, distance_return = F) {
+  m = nchar(w1) + 1
+  n = nchar(w2) + 1
+  
+  M = matrix(0, nrow = m, ncol = n)
+  M[1,] = 0:(n-1) * delta
+  M[,1] = 0:(m-1) * delta
+  
+  for (i in 2:m){
+    for (j in 2:n) {
+      M[i, j] = min(
+        (substring(w1, i-1, i-1) != substring(w2, j-1, j-1)) * alpha + M[i-1, j-1],
+        delta + M[i-1, j],
+        delta + M[i, j-1]
+      )
+    }
+  }
+  
+  if (distance_return) return(M[m-1, n-1])
+  return(M)
+}
+
+sequence_align('test', 'fat', 2, 5)
+sequence_align('test', 'fat', 2, 5, distance_return = T)
+```
+
+The distance is defined to the minimum sequence alignment penalty with respect to $\delta$ and $\alpha$. We can calculate those now for the words given in the dataset for say a $\delta = 1$ and $\alpha = 2$.
+
+```{r calculate_distance, cache=T}
+distance = map2_dbl(word_data$train.text, word_data$train.user, sequence_align, delta = 1, alpha = 2, distance_return = T)
+
+set.seed(40)
+word_data %>% 
+  cbind(distance) %>% 
+  slice_sample(n = 50)
+
+```
+
+We are interested in finding parameters $\delta$ and $\alpha$ that best discriminate matches from mismatches. To do this, I would incorporate the `nlm` function which uses a gradient descent algorithm to determine these parameters. \
+However, it is of my interest to first begin by viewing the data first and seeing if we can just guess some values. Let's begin with the sensible $\delta = 1$ (blank penalty) and $\alpha = 2$ (mismatch penalty).
+
+```{r visualise}
+word_data %>% 
+  cbind(distance) %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = distance, fill = match)) +
+  geom_density(col = 'black') +
+  theme_bw()
+
+```
+
+There is some serious overlap here. I suppose this wasn't a smart approach. Thankfully we have another idea. 
+
+
+```{r nlm}
+matches = word_data[word_data$match,]
+mismatches = word_data[!word_data$match,]
+
+sequence_align.nlm <- function(v) {
+  d = v[1]
+  a = v[2]
+  
+  matches_dat = map2_dbl(matches$train.text, matches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+  mismatches_dat = map2_dbl(mismatches$train.text, mismatches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+  
+  # join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. 
+  p_mis = tibble(distance = append(matches_dat, mismatches_dat),
+         match = rep(c(T, F), each = 1e3)) %>% 
+    arrange(distance) %>% 
+    slice(1:1000) %>% 
+    pull(match) %>% sum()/1000
+  
+  1-p_mis
+}
+
+nlm(sequence_align.nlm, c(1, 2))
+
+```
+
+Well I should've known. `nlm` wont help us here since I assume it would only work on those algorithms with a derivative? I've got another idea though which is to create my own random restart hill climbing algorithm and determine the values that way. 
+
+```{r try again}
+hill_climb <- function(f, v, prev = f(v), temp = 1, threshold = 1e-3){
+  # 2-D hill climbing crude algorithm. 
+  # Small error check (just in case)
+  if (length(v) != 2) stop('ERROR: v must be of dimension: 2')
+  
+  tests = t(apply(matrix(c(1, -1, rep(0, 4), 1, -1) * temp, ncol = 2), 1, function(r) r + v))
+  
+  results = apply(tests, 1, f)
+  
+  min_i = which.min(results)
+  
+  if (results[min_i] < prev) return(hill_climb(f, tests[min_i,], results[min_i], temp))
+  else if (temp < threshold) return(list(param = v, p = prev))
+  else return(hill_climb(f, v, prev, temp / 2))
+}
+
+hill_climb(sequence_align.nlm, c(1, 2))
+
+```
+
+So this reckons that the best parameters are $\delta = 0$ and $\alpha = 2$. And this apparently does so such that there is a perfect distinction between the mismatches and the matches.
+
+```{r testing results, cache = T}
+distance = map2_dbl(word_data$train.text, word_data$train.user, sequence_align, delta = 0, alpha = 2, distance_return = T)
+
+word_data %>% 
+  cbind(distance) %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = distance, fill = match)) +
+  geom_density(col = 'black') +
+  theme_bw()
+
+sequence_align('test', 'try', delta = 0, alpha = 2)
+```
+
+Ah that makes sense. Okay let's limit it such that the penalty cannot exceed 0. 
+
+```{r try again 2, cache = T}
+sequence_align.nlm <- function(v) {
+  d = v[1]
+  a = v[2]
+  
+  # FIX
+  if (d <= 0 | a <= 0) return (2) #  
+  
+  matches_dat = map2_dbl(matches$train.text, matches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+  mismatches_dat = map2_dbl(mismatches$train.text, mismatches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+  
+  # join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. 
+  p_mis = tibble(distance = append(matches_dat, mismatches_dat),
+         match = rep(c(T, F), each = 1e3)) %>% 
+    arrange(distance) %>% 
+    slice(1:1000) %>% 
+    pull(match) %>% sum()/1000
+  
+  1-p_mis
+}
+
+# undebug(hill_climb)
+
+hill_climb(sequence_align.nlm, c(1, 2))
+hill_climb(sequence_align.nlm, c(10, 20), temp = 4)
+hill_climb(sequence_align.nlm, c(200, 10), temp = 16)
+```
+
+Alright, that didn't really work. So far though I am most comfortable with the 2, 2 parameters but I really think we can do better. Time for a brute approach.
+
+```{r brute try again}
+# start.time = Sys.time()
+# 
+# sequence_align.nlm <- function(v) {
+#   d = v[1]
+#   a = v[2]
+#   
+#   if (d == 1) {print(paste0(a * 2 - 2, '%'))
+#     print(Sys.time() - start.time)
+#     print(c(d,a))}
+#   
+#   # FIX
+#   if (d <= 0 | a <= 0) return (2) #  
+#   
+#   matches_dat = map2_dbl(matches$train.text, matches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+#   mismatches_dat = map2_dbl(mismatches$train.text, mismatches$train.user, sequence_align, delta = d, alpha = a, distance_return = T)
+#   
+#   # join and arrange in increasing order on distance. Cut in half and estimate the proportion of mismatches in the first half. 
+#   p_mis = tibble(distance = append(matches_dat, mismatches_dat),
+#          match = rep(c(T, F), each = 1e3)) %>% 
+#     arrange(distance) %>% 
+#     slice(1:1000) %>% 
+#     pull(match) %>% sum()/1000
+#   
+#   1-p_mis
+# }
+# 
+# param = expand.grid(deltas = 1:50, alphas = 1:50)
+# 
+# results = apply(param, 1, sequence_align.nlm)
+# 
+# results.data = cbind(param, results)
+# 
+# write_csv(results.data, 'results_data.csv')
+# # About 5 minutes
+
+results.data = read_csv('results_data.csv')
+
+expand.grid(deltas = 1:50, alphas = 1:50)[which.min(results.data$results), ]
+
+```
+
+So once again, the parameters that provided the most distinction are simply $\delta = 1$ and $\alpha = 1$. This is not totally satisfying but I'll take it for now. \
+I could try alternative approaches, but I am tired of testing, and am happy to move on with the project. \
+Now we just need to chose a cutoff point that will determine if a word was a misspelling or a mismatch. What is important to keep in mind however is the length of the word, since that appears to contribute lots to larger distances. 
+
+```{r choose cutoff, fig.width=15, fig.height=8}
+word_data2 = word_data %>% 
+  cbind(distance = append(map2_dbl(matches$train.text, matches$train.user, sequence_align, delta = 1, alpha = 1, distance_return = T),
+               map2_dbl(mismatches$train.text, mismatches$train.user, sequence_align, delta = 1, alpha = 1, distance_return = T))) %>% 
+  as_tibble() %>% 
+  mutate(word_length = nchar(train.text))
+
+word_data2 %>% 
+  group_by(word_length, match) %>% 
+  mutate(avg_distance = mean(distance),
+         n_words = n()) %>% 
+  ggplot(aes(x = word_length, y = distance)) +
+  geom_point(alpha = 0.02) +
+  geom_line(aes(y = avg_distance)) +
+  geom_smooth() +
+  theme_bw() +
+  labs(title = 'Average distance over Word Length',
+       x = 'Word Length', y = 'Distance') +
+  scale_x_continuous(breaks = 1:15) +
+  scale_y_continuous(breaks = 0:12) +
+  geom_text(aes(label = n_words, y = 12)) +
+  facet_wrap(~match)
+
+```
+
+
+To estimate how much we need to scale the distance down by the length of the word, we can use regression analysis. 
+
+```{r regression analysis to estimate scale factor of distance}
+fit1 = glm(data = word_data2,
+          match ~ distance * word_length,
+          family = 'binomial')
+
+summary(fit1)
+
+fit2 = glm(data = word_data2,
+          match ~ distance + word_length,
+          family = 'binomial')
+
+summary(fit2)
+```
+
+This tells me that using just this distance metric isn't quite enough to well predict whether the word was meant to be a match. It is very necessary that we consider this coefficient. \
+\
+If we do here are the results.
+
+## Part 3: The Results.
+
+What I gather from the analysis above is that we can estimate the probability that two words, $w, w'$, are a potential match by applying the algorithm to determine the *minimum distance* $d_{ww'}$ and combining it with the length of the word $w$, $s_w$. The formula below is the estimate of this probability:
+
+$$
+P(w_i = w_i') = plogis(2 - 2.15 d_{ww'} + 0.15s_w)
+$$
+
+
+
+$$
+Where, \quad plogis(x) = \frac{exp(x)}{1+exp(x)}
+$$
+
+To choose a good probability to cut off, we'll do an *ROC* analysis on some test data, and use *AUC* to estimate it's performance. \
+Which means more typing words for 20 minutes. Great.
+
+## Part 4: Efficacy. 
+
+```{r generate test words to type}
+set.seed(321)
+sample.n = sample(length(text.words3), 1e3)
+test.text = text.words3[sample.n]
+test.text[1:10]
+writeLines(test.text, 'test.text.txt')
+
+
+```
+
+
+
+```{r my data ahhhhhh}
+test.user = scan('user_text_test.txt', 'char', sep = '\n')
+
+(my_data.test = tibble(
+  test.text,
+  test.user,
+  match = TRUE
+))
+
+
+```
+
+
+```{r other data mismatches test}
+set.seed(21)
+sample.n = sample(length(text.words3), 2e3)
+test.text.mis = text.words3[sample.n]
+test.text.mis[1:10]
+
+# Put it into same format and row bind.
+(word_data.test = matrix(test.text.mis, ncol = 2) %>% 
+  as.data.frame() %>% 
+  cbind(F) %>% 
+  as_tibble() %>% 
+  rename('test.text' = V1, 'test.user' = V2, 'match' = `F`) %>% 
+  rbind(my_data.test, .) %>% 
+  mutate(match = case_when(match ~ match,
+                           test.text == test.user ~ TRUE,
+                           TRUE ~ match)))
+
+```
+
+
+Before building the ROC, we'll need to code up the function that is outlined above.
+
+```{r probability function}
+prob_w_w <- function(x, y){
+  d = sequence_align(x, y, 1, 1, T)
+  s = nchar(x)
+  plogis(2 - 2.15 * d + 0.15 * s)
+}
+
+
+probs = map2_dbl(word_data.test$test.text, word_data.test$test.user, prob_w_w)
+
+(word_data.test2 = word_data.test %>% 
+  cbind(probs) %>% 
+  as_tibble())
+
+```
+
+
+Now we can build an ROC. This is going to be fun!
+
+```{r ROC}
+roc_data = word_data.test2 %>% 
+  arrange(desc(probs))
+
+# Copying code from my school assignment. (Shoutout DATASCI 399 UOA class of 2022 baby!)
+
+iterations = 1001
+test_p = seq(0, 1, length = iterations)
+specificity  = numeric(iterations)
+sensitivity = numeric(iterations)
+
+for (i in 1:iterations){
+  p = test_p[i]
+  roc_data2 = roc_data %>% mutate(assumed_match = probs >= p)
+  roc_data2 = roc_data2 %>% 
+    mutate(
+      tp = assumed_match & match,
+      fp = assumed_match & !match,
+      tn = !assumed_match & !match,
+      fn = !assumed_match & match
+    )
+  
+  sensitivity[i] = sum(roc_data2$tp) / (sum(roc_data2$tp) + sum(roc_data2$fn))
+  specificity[i] = sum(roc_data2$tn) / (sum(roc_data2$tn) + sum(roc_data2$fp))
+}
+
+
+roc_table = tibble(
+  test_p,
+  sensitivity,
+  specificity,
+  sen_spec = sensitivity + specificity
+)
+
+# Gives multiple best p's. Give middle
+best_p = slice_max(roc_table, sen_spec)[nrow(slice_max(roc_table, sen_spec)) %/% 2,]
+
+# Calculate AUC
+# Crudely, take the sum of the sensitivity + specificity
+
+roc_table %>% 
+  ggplot(aes(x = 1-specificity, y = sensitivity)) +
+  geom_line(col = 'blue') +
+  geom_abline(slope = 1, lty = 2, alpha = 0.5) +
+  geom_point(data = best_p, col = 'yellow') +
+  geom_text(data = best_p, x = 0.25, y = 0.75, aes(label = sprintf('Best p = %f', test_p))) +
+  geom_text(data = best_p, x = 0.25, y = 0.68, aes(label = str_c('~', sprintf('%.2f', sen_spec/2*100), '% accuracy'))) +
+  theme_bw() +
+  xlim(0, 1)
+
+
+
+
+```
+
+That's incredible. 
+
+
+# Conclusion
+
+I set out to create an algorithm that utilises *sequence-alignment* to determine if two words were meant to match or not. This is going to be useful in the development of my type-racing game so that the computer can discern between words that are meant to be matches and those which are not. \
+My resulting algorithm, according to data that I collected myself (I'm well aware of the violations here), is able to discern misspellings from mis matching words with 97.94% accuracy; including perfect spellings. \
+This means that this algorithm should be more than effective at determining word matches between two sentences. 
+
+## Critique
+
+* Determining the best values for $\delta$ and $\alpha$ in the sequence-alignment algorithm was crude. This can be improved upon, although I am satisfied enough with the results that I am not willing to do it myself at this point.
+* All the training and testing data I collected myself. I tried to simulate what misspellings would look like in a rushed, time pressured environment but I am sure other subjects would have different results. I am hoping that the fatigue I experience from typing thousands of words would be enough to simulate this expected environment. 
+
+
+
+
+
