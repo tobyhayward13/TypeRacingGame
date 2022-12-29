@@ -27,6 +27,7 @@ class Game:
         
         self.mode = 1   # Standard Time tracking mode. 
         self.mismatches = None
+        self.mismatches_score = None
         self.last_sentence = None
         self.start_ui()
     
@@ -38,7 +39,8 @@ class Game:
 
         mode = int(input('Mode: '))
         self.mode = mode
-        self.play()
+        if mode != 0:
+            self.play()
 
     def play(self):
         print('\n'*2)
@@ -47,7 +49,7 @@ class Game:
         
     
     def play_standard(self, replay = False):
-        self.mismatches = list()
+        self.mismatches = list();   self.mismatches_score = list()
         i = r.randrange(0, len(self.sentences))
         sentence = self.sentences[i]
         if replay:
@@ -80,7 +82,7 @@ class Game:
 
         next = int(input())
         while next == 1:
-            sa.print_array(self.mismatches)
+            self.print_mistmatches()
             print('\n'*2)
             print('Type:')
             print('1.   For a breakdown of your mismatched words.')
@@ -91,8 +93,8 @@ class Game:
         
         if next == 2:
             self.play_standard(replay=True)
-        
-        self.start_ui()
+        else:
+            self.start_ui()
         
 
     
@@ -113,6 +115,7 @@ class Game:
             # If the words are deemed to be the similar enough.
             elif self.prob_w_w(w1, w2) > 0.592:
                 self.mismatches.append([w1, w2])
+                self.mismatches_score.append(self.prob_w_w(w1, w2))
                 # Split the words up and count the number of matching characters.
                 # # Alternatively, we can incorporate the distance statistic.
                 correct_count += self.char_count(w1, w2)
@@ -120,6 +123,7 @@ class Game:
             # If the words are not deemed to be the same
             else:
                 self.mismatches.append([w1, w2])
+                self.mismatches_score.append(self.prob_w_w(w1, w2))
                 # Search ahead 3 words on the user side and see if there is a close enough match.
                 better_match = False
                 for i in range(1, 4):
@@ -169,8 +173,11 @@ class Game:
         d = sa.sequence_align(w1, w2, delta = 1, alpha = 1, distance_return = True)
         return 1 - d/max(len(w1), len(w2))
 
+    def print_mistmatches(self):
+        for i in range(len(self.mismatches)):
+            print(self.mismatches[i], round(self.mismatches_score[i], 4), end = '')
+            print('% match.')
 
-                
 
 
 def main():
