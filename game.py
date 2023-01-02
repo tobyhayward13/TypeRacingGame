@@ -4,9 +4,11 @@ Inspired by typeracer.com, I want to create a game in python that gives a random
 expects you to type it out as fast as you can. 
 A few things I want to achieve with this game are listed below:
     - Fork a dataset that contains a bunch of different sentences. 
-    - Create a text base UI.
-    - Create a simple typing game that measures time and accuracy of your attempt. 
-    - Upload to GitHub.
+    - Create a text base UI. Y
+    - Create a simple typing game that measures time and accuracy of your attempt. Y
+    -   - Create a better scoring system to detemine the distances between words that goes beyond sequence alignment.
+    -   -   - Allocate a compensation for letters that are capitilised.
+    - Upload to GitHub. Y
     - Create a typing game that takes previous scores and uses it to measure progress. 
     -   - This involves saving previous scores.
     - Create a timer window that tracks the time spent on the task.
