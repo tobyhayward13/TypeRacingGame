@@ -26,6 +26,8 @@ def sequence_align(w1, w2, delta, alpha, distance_return = False):
                 delta + M[i][j-1]
             )
     
+    # print(M)
+    
     if distance_return:
         return M[m-1][n-1]
     return M
