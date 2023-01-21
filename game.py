@@ -84,7 +84,7 @@ class Game:
 
         next = int(input())
         while next == 1:
-            self.print_mistmatches()
+            self.print_mismatches()
             print('\n'*2)
             print('Type:')
             print('1.   For a breakdown of your mismatched words.')
@@ -175,7 +175,7 @@ class Game:
         d = sa.sequence_align(w1, w2, delta = 1, alpha = 1, distance_return = True)
         return 1 - d/max(len(w1), len(w2))
 
-    def print_mistmatches(self):
+    def print_mismatches(self):
         for i in range(len(self.mismatches)):
             print(self.mismatches[i], round(self.mismatches_score[i], 4), end = '')
             print('% match.')
